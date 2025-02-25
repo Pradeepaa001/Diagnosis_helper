@@ -122,9 +122,3 @@ The following dependencies are required (installed via Poetry):
 ## **Contributors**  
 - **Pradeepaa001** – [mpradeepaa2020@gmail.com](mailto:mpradeepaa2020@gmail.com)  
 
----
-
-## **License**  
-This project is licensed under the **MIT License**.  
-
-Would you like to add anything specific?
