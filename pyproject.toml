@@ -6,9 +6,26 @@ authors = [
     {name = "Pradeepaa001",email = "mpradeepaa2020@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.11"
-dependencies = [
-]
+
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+torch = "^2.0"
+torchvision = "^0.15"
+tensorflow = "^2.14"
+pillow = "^9.5.0"
+numpy = "^1.24"
+opencv-python = "^4.8.0"
+matplotlib = "^3.7.2"
+streamlit = "^1.27.0"
+flask = "^2.3.3"
+fastapi = "^0.111.0"
+pydantic = "^2.5.0"
+uvicorn = "^0.30.0"
+syft = "^0.9"  # Federated Learning
+google-generativeai = "^0.2.0"  # Google Gemini API
+scipy = "^1.10.1"
+python-dotenv = "^1.0.0"  # For API key management
 
 [tool.poetry]
 packages = [{include = "diagnosis_asst", from = "src"}]
