@@ -1,27 +1,23 @@
+from models.model_loader import load_model
 import torch
 import torchvision.transforms as transforms
 from PIL import Image
-from src.models.model_loader import load_model
 
-# Load pre-trained model
+# Load trained model once
 model = load_model()
 
-# Define preprocessing steps
-def preprocess_image(image):
+def predict_image(image_path):
+    """Predicts disease from medical image."""
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
-        transforms.ToTensor(),
+        transforms.ToTensor()
     ])
-    return transform(image).unsqueeze(0)
+    
+    image = Image.open(image_path)
+    image = transform(image).unsqueeze(0)  # Add batch dimension
 
-# Function to make predictions
-def diagnose(image_path):
-    image = Image.open(image_path).convert('RGB')
-    image_tensor = preprocess_image(image)
-
-    model.eval()
     with torch.no_grad():
-        output = model(image_tensor)
-        probabilities = torch.nn.functional.softmax(output, dim=1)
+        output = model(image)
+        prediction = torch.argmax(output, dim=1).item()
 
-    return probabilities.numpy()
+    return "Disease Detected" if prediction == 1 else "No Disease"

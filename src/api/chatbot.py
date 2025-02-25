@@ -1,10 +1,12 @@
 import google.generativeai as genai
-import src.config as config
+import os
+from fastapi import FastAPI
 
-genai.configure(api_key=config.GOOGLE_API_KEY)
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-# Query Gemini API
-def chat_with_gemini(query):
-    model = genai.GenerativeModel("gemini-pro")
-    response = model.generate_content(query)
-    return response.text
+app = FastAPI()
+
+@app.get("/chatbot")
+def chatbot_query(query: str):
+    response = genai.generate(model="gemini-pro", prompt=query)
+    return {"response": response.text}

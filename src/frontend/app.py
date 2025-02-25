@@ -1,24 +1,24 @@
 import streamlit as st
-from PIL import Image
-from src.api.diagnostic_api import diagnose
-from src.api.chatbot import chat_with_gemini
+import requests
 
-st.title("🩺 AI-Powered Medical Assistant")
+st.title("AI Diagnostic Assistant")
 
-tab1, tab2 = st.tabs(["🖼️ Diagnosis", "💬 Chatbot"])
+st.sidebar.header("Navigation")
+page = st.sidebar.radio("Go to", ["Diagnosis", "Medical Chatbot"])
 
-# Diagnosis Tab
-with tab1:
-    uploaded_file = st.file_uploader("Upload MRI/X-ray", type=["jpg", "png"])
-    if uploaded_file:
-        image = Image.open(uploaded_file)
-        st.image(image, caption="Uploaded Image", use_column_width=True)
-        prediction = diagnose(uploaded_file)
-        st.write(f"**Diagnosis Result:** {prediction}")
+if page == "Diagnosis":
+    st.header("Upload an X-ray/MRI for Diagnosis")
+    uploaded_file = st.file_uploader("Choose an image...", type=["png", "jpg", "jpeg"])
+    
+    if uploaded_file is not None:
+        files = {"file": uploaded_file.getvalue()}
+        response = requests.post("http://127.0.0.1:8000/diagnose", files=files)
+        st.write("Result:", response.json()["prediction"])
 
-# Chatbot Tab
-with tab2:
-    user_query = st.text_input("Ask a medical question:")
-    if user_query:
-        response = chat_with_gemini(user_query)
-        st.write(f"**Gemini Response:** {response}")
+elif page == "Medical Chatbot":
+    st.header("Ask a medical question")
+    user_input = st.text_input("Your query:")
+    
+    if st.button("Ask"):
+        response = requests.get(f"http://127.0.0.1:8000/chatbot?query={user_input}")
+        st.write("Response:", response.json()["response"])
